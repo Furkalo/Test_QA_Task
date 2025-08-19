@@ -1,0 +1,23 @@
+﻿# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Reports / logs
+allure-results/
+allure-report/
+reports/
+logs/
+
+# Environment files (якщо є)
+.env
+.env.local
