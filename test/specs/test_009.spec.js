@@ -1,23 +1,26 @@
-﻿describe("Checkout with empty cart", () => {
-  it("should show error when cart is empty", async () => {
-    await browser.url("https://www.saucedemo.com/");
-    await $("#user-name").setValue("standard_user");
-    await $("#password").setValue("secret_sauce");
-    await $("#login-button").click();
+﻿import LoginPage from "../pageobjects/login.page.js";
+import CartPage from "../pageobjects/Cart.page.js";
 
+describe("Checkout with empty cart", () => {
+  it("should show error when cart is empty", async () => {
+    // Логін
+    await LoginPage.open();
+    await LoginPage.login("standard_user", "secret_sauce");
     await expect(await browser.getUrl()).toContain("inventory.html");
 
-    await $('[data-test="shopping-cart-link"]').click();
+    // Відкрити корзину
+    await CartPage.openCart();
     await expect(await browser.getUrl()).toContain("cart.html");
 
-    const items = await $$(".cart_item");
-    await expect(items.length).toBe(0);
+    // Перевірка, що корзина порожня
+    const itemsCount = await CartPage.getItemsCount();
+    expect(itemsCount).toBe(0);
 
-    await $('[data-test="checkout"]').click();
+    // Натискаємо Checkout
+    await CartPage.checkout();
 
-    const errorMsg = await $(".error-message-container");
-
-    const text = await errorMsg.getText();
+    // Перевірка помилки
+    const text = await CartPage.getErrorText();
     expect(text).toContain("Cart is empty");
   });
 });

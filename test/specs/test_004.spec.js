@@ -1,28 +1,21 @@
-﻿describe("Logout test via Burger Menu", () => {
-  it("should logout successfully and redirect to Login page", async () => {
-    await browser.url("https://www.saucedemo.com/");
-    const usernameInput = await $("#user-name");
-    await usernameInput.setValue("standard_user");
-    const passwordInput = await $("#password");
-    await passwordInput.setValue("secret_sauce");
-    const loginButton = await $("#login-button");
-    await loginButton.click();
+﻿import LoginPage from "../pageobjects/login.page.js";
+import InventoryPage from "../pageobjects/Inventory.page.js";
 
-    const currentUrl = await browser.getUrl();
+describe("Logout test via Burger Menu", () => {
+  it("should logout successfully and redirect to Login page", async () => {
+    await LoginPage.open();
+    await LoginPage.login("standard_user", "secret_sauce");
+
+    const currentUrl = await InventoryPage.getCurrentUrl();
     expect(currentUrl).toContain("inventory.html");
 
-    const burgerButton = await $("#react-burger-menu-btn");
-    await burgerButton.click();
+    await InventoryPage.openMenu();
+    await InventoryPage.logout();
 
-    const logoutButton = await $("#logout_sidebar_link");
-    await logoutButton.click();
-
-    const loginUrl = await browser.getUrl();
+    const loginUrl = await InventoryPage.getCurrentUrl();
     expect(loginUrl).toContain("saucedemo.com");
 
-    const usernameValue = await $("#user-name").getValue();
-    const passwordValue = await $("#password").getValue();
-    expect(usernameValue).toBe("");
-    expect(passwordValue).toBe("");
+    expect(await LoginPage.getUsernameValue()).toBe("");
+    expect(await LoginPage.getPasswordValue()).toBe("");
   });
 });

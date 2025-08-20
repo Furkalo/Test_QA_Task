@@ -1,47 +1,43 @@
-﻿describe("Cart persistence after logout/login", () => {
-  it("should retain items in cart after logout/login", async () => {
-    await browser.url("https://www.saucedemo.com/");
-    const usernameInput = await $("#user-name");
-    await usernameInput.setValue("standard_user");
-    const passwordInput = await $("#password");
-    await passwordInput.setValue("secret_sauce");
-    const loginButton = await $("#login-button");
-    await loginButton.click();
+﻿import LoginPage from "../pageobjects/login.page.js";
+import InventoryPage from "../pageobjects/Inventory.page.js";
+import CartPage from "../pageobjects/Cart.page.js";
 
-    let currentUrl = await browser.getUrl();
+describe("Cart persistence after logout/login", () => {
+  it("should retain items in cart after logout/login", async () => {
+    // логін
+    await LoginPage.open();
+    await LoginPage.login("standard_user", "secret_sauce");
+
+    let currentUrl = await InventoryPage.getCurrentUrl();
     expect(currentUrl).toContain("inventory.html");
 
-    const addToCartButton = await $("#add-to-cart-sauce-labs-backpack");
-    await addToCartButton.click();
+    // додаємо товар у корзину
+    await InventoryPage.addBackpackToCart();
 
-    const burgerButton = await $("#react-burger-menu-btn");
-    await burgerButton.click();
+    // вихід
+    await InventoryPage.openMenu();
+    await InventoryPage.logout();
 
-    const logoutButton = await $("#logout_sidebar_link");
-    await logoutButton.click();
-
-    currentUrl = await browser.getUrl();
+    currentUrl = await InventoryPage.getCurrentUrl();
     expect(currentUrl).toContain("saucedemo.com");
 
-    const usernameValue = await $("#user-name").getValue();
-    const passwordValue = await $("#password").getValue();
-    expect(usernameValue).toBe("");
-    expect(passwordValue).toBe("");
+    // перевірка очищення інпутів
+    expect(await LoginPage.getUsernameValue()).toBe("");
+    expect(await LoginPage.getPasswordValue()).toBe("");
 
-    await usernameInput.setValue("standard_user");
-    await passwordInput.setValue("secret_sauce");
-    await loginButton.click();
+    // знову логін
+    await LoginPage.login("standard_user", "secret_sauce");
 
-    currentUrl = await browser.getUrl();
+    currentUrl = await InventoryPage.getCurrentUrl();
     expect(currentUrl).toContain("inventory.html");
 
-    const cartButton = await $("#shopping_cart_container a");
-    await cartButton.click();
-
-    currentUrl = await browser.getUrl();
+    // відкриваємо корзину
+    await CartPage.openCart();
+    currentUrl = await CartPage.getCurrentUrl();
     expect(currentUrl).toContain("cart.html");
 
-    const cartItems = await $$(".cart_item");
-    expect(cartItems.length).toBeGreaterThan(0);
+    // перевірка наявності товару
+    const itemsCount = await CartPage.getItemsCount();
+    expect(itemsCount).toBeGreaterThan(0);
   });
 });

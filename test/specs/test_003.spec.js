@@ -1,20 +1,12 @@
-﻿describe("Login test with invalid login", () => {
+﻿import LoginPage from "../pageobjects/login.page.js";
+
+describe("Login test with invalid login", () => {
   it("should show error on invalid login", async () => {
-    await browser.url("https://www.saucedemo.com/");
+    await LoginPage.open();
+    await LoginPage.login("standarD_user", "secret_sauce");
 
-    const usernameInput = await $("#user-name");
-    await usernameInput.setValue("standarD_user");
-
-    const passwordInput = await $("#password");
-    await passwordInput.setValue("secret_sauce");
-
-    const loginButton = await $("#login-button");
-    await loginButton.click();
-
-    const errorMsg = await $('[data-test="error"]');
-    await expect(await errorMsg.isDisplayed()).toBe(true);
-    await expect(await errorMsg.getText()).toContain(
-      "Username and password do not match"
-    );
+    await expect(LoginPage.errorMsg).toBeDisplayed();
+    const errorText = await LoginPage.getErrorText();
+    expect(errorText).toContain("Username and password do not match");
   });
 });

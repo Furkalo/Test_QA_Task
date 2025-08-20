@@ -1,16 +1,11 @@
-﻿describe("Login test", () => {
+﻿import LoginPage from "../pageobjects/login.page.js";
+
+describe("Login test", () => {
   it("should login with valid credentials", async () => {
-    await browser.url("https://www.saucedemo.com/");
+    await LoginPage.open();
+    await LoginPage.login("standard_user", "secret_sauce");
 
-    const usernameInput = await $("#user-name");
-    await usernameInput.setValue("standard_user");
-
-    const passwordInput = await $("#password");
-    await passwordInput.setValue("secret_sauce");
-
-    const loginButton = await $("#login-button");
-    await loginButton.click();
-
-    await expect(await browser.getUrl()).toContain("inventory.html");
+    const currentUrl = await browser.getUrl();
+    expect(currentUrl).toContain("inventory.html");
   });
 });

@@ -1,38 +1,27 @@
-﻿describe("Footer Links", () => {
-  it("should open social links in new tabs", async () => {
-    // 1. Login
-    await browser.url("https://www.saucedemo.com/");
-    await $("#user-name").setValue("standard_user");
-    await $("#password").setValue("secret_sauce");
-    await $("#login-button").click();
+﻿import LoginPage from "../pageobjects/login.page.js";
+import InventoryPage from "../pageobjects/Inventory.page.js";
 
+describe("Footer Links", () => {
+  it("should open social links in new tabs", async () => {
+    // 1. Логін
+    await LoginPage.open();
+    await LoginPage.login("standard_user", "secret_sauce");
     await expect(await browser.getUrl()).toContain("inventory.html");
 
-    const twitterLink = await $('[data-test="social-twitter"]');
-    await twitterLink.click();
-    let handles = await browser.getWindowHandles();
-    await browser.switchToWindow(handles[1]);
-    let twitterUrl = await browser.getUrl();
+    // Соцмережі: перевірка URL після кліку
+    const twitterUrl = await InventoryPage.clickSocialLink(
+      InventoryPage.twitterLink
+    );
     expect(twitterUrl).toMatch(/(twitter|x)\.com\/saucelabs/);
-    await browser.closeWindow();
-    await browser.switchToWindow(handles[0]);
 
-    const facebookLink = await $('[data-test="social-facebook"]');
-    await facebookLink.click();
-    handles = await browser.getWindowHandles();
-    await browser.switchToWindow(handles[1]);
-    let facebookUrl = await browser.getUrl();
+    const facebookUrl = await InventoryPage.clickSocialLink(
+      InventoryPage.facebookLink
+    );
     expect(facebookUrl).toContain("facebook.com/saucelabs");
-    await browser.closeWindow();
-    await browser.switchToWindow(handles[0]);
 
-    const linkedinLink = await $('[data-test="social-linkedin"]');
-    await linkedinLink.click();
-    handles = await browser.getWindowHandles();
-    await browser.switchToWindow(handles[1]);
-    let linkedinUrl = await browser.getUrl();
+    const linkedinUrl = await InventoryPage.clickSocialLink(
+      InventoryPage.linkedinLink
+    );
     expect(linkedinUrl).toContain("linkedin.com/company/sauce-labs");
-    await browser.closeWindow();
-    await browser.switchToWindow(handles[0]);
   });
 });
