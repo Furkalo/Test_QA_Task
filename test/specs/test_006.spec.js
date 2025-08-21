@@ -1,8 +1,5 @@
-﻿import InventoryPage from "../pageobjects/Inventory.page.js";
-
-describe("Product sorting", () => {
+﻿describe("Product sorting", () => {
   it("should sort products correctly by all options", async () => {
-    // логін
     await browser.url("https://www.saucedemo.com/");
     await $("#user-name").setValue("standard_user");
     await $("#password").setValue("secret_sauce");
@@ -13,7 +10,6 @@ describe("Product sorting", () => {
 
     const sortDropdown = await $('[data-test="product-sort-container"]');
 
-    // A-Z
     await sortDropdown.selectByAttribute("value", "az");
     const itemElementsAZ = await $$(".inventory_item_name");
     const namesAZ = [];
@@ -22,7 +18,6 @@ describe("Product sorting", () => {
     }
     expect(namesAZ).toEqual([...namesAZ].sort());
 
-    // Z-A
     await sortDropdown.selectByAttribute("value", "za");
     const itemElementsZA = await $$(".inventory_item_name");
     const namesZA = [];
@@ -31,7 +26,6 @@ describe("Product sorting", () => {
     }
     expect(namesZA).toEqual([...namesZA].sort().reverse());
 
-    // Low → High
     await sortDropdown.selectByAttribute("value", "lohi");
     const priceElementsLow = await $$(".inventory_item_price");
     const pricesLow = [];
@@ -41,7 +35,6 @@ describe("Product sorting", () => {
     }
     expect(pricesLow).toEqual([...pricesLow].sort((a, b) => a - b));
 
-    // High → Low
     await sortDropdown.selectByAttribute("value", "hilo");
     const priceElementsHigh = await $$(".inventory_item_price");
     const pricesHigh = [];

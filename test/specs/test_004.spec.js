@@ -1,21 +1,21 @@
-﻿import LoginPage from "../pageobjects/login.page.js";
-import InventoryPage from "../pageobjects/Inventory.page.js";
+﻿import loginPage from "../pageobjects/login.page.js";
+import inventoryPage from "../pageobjects/Inventory.page.js";
 
 describe("Logout test via Burger Menu", () => {
   it("should logout successfully and redirect to Login page", async () => {
-    await LoginPage.open();
-    await LoginPage.login("standard_user", "secret_sauce");
+    await loginPage.open();
+    await loginPage.login("standard_user", "secret_sauce");
 
-    const currentUrl = await InventoryPage.getCurrentUrl();
+    const currentUrl = await inventoryPage.getCurrentUrl();
     expect(currentUrl).toContain("inventory.html");
 
-    await InventoryPage.openMenu();
-    await InventoryPage.logout();
+    await inventoryPage.openMenu();
+    await inventoryPage.logout();
 
-    const loginUrl = await InventoryPage.getCurrentUrl();
+    const loginUrl = await inventoryPage.getCurrentUrl();
     expect(loginUrl).toContain("saucedemo.com");
 
-    expect(await LoginPage.getUsernameValue()).toBe("");
-    expect(await LoginPage.getPasswordValue()).toBe("");
+    expect(await loginPage.getUsernameValue()).toBe("");
+    expect(await loginPage.getPasswordValue()).toBe("");
   });
 });

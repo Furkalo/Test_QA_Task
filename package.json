@@ -1,23 +1,19 @@
 {
   "name": "pet_project",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:cucumber": "wdio run ./wdio.conf.js",
     "wdio": "wdio run ./wdio.conf.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "20": "^1.0.0"
-  },
   "devDependencies": {
+    "@cucumber/cucumber": "10.9.0",
     "@wdio/cli": "^9.19.1",
+    "@wdio/cucumber-framework": "^9.19.1",
     "@wdio/local-runner": "^9.19.1",
-    "@wdio/mocha-framework": "^9.19.1",
     "@wdio/spec-reporter": "^9.19.1",
-    "@wdio/visual-service": "^9.0.0"
+    "chai": "^5.3.1",
+    "chromedriver": "^139.0.0",
+    "webdriverio": "^9.19.1"
   }
 }

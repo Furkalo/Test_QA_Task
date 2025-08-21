@@ -1,26 +1,24 @@
-﻿import LoginPage from "../pageobjects/login.page.js";
-import InventoryPage from "../pageobjects/Inventory.page.js";
+﻿import loginPage from "../pageobjects/login.page.js";
+import inventoryPage from "../pageobjects/Inventory.page.js";
 
 describe("Footer Links", () => {
   it("should open social links in new tabs", async () => {
-    // 1. Логін
-    await LoginPage.open();
-    await LoginPage.login("standard_user", "secret_sauce");
+    await loginPage.open();
+    await loginPage.login("standard_user", "secret_sauce");
     await expect(await browser.getUrl()).toContain("inventory.html");
 
-    // Соцмережі: перевірка URL після кліку
-    const twitterUrl = await InventoryPage.clickSocialLink(
-      InventoryPage.twitterLink
+    const twitterUrl = await inventoryPage.clickSocialLink(
+      inventoryPage.twitterLink
     );
     expect(twitterUrl).toMatch(/(twitter|x)\.com\/saucelabs/);
 
-    const facebookUrl = await InventoryPage.clickSocialLink(
-      InventoryPage.facebookLink
+    const facebookUrl = await inventoryPage.clickSocialLink(
+      inventoryPage.facebookLink
     );
     expect(facebookUrl).toContain("facebook.com/saucelabs");
 
-    const linkedinUrl = await InventoryPage.clickSocialLink(
-      InventoryPage.linkedinLink
+    const linkedinUrl = await inventoryPage.clickSocialLink(
+      inventoryPage.linkedinLink
     );
     expect(linkedinUrl).toContain("linkedin.com/company/sauce-labs");
   });
